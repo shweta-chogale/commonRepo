@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="clientProvider" />
+    </security:authentication-manager>
+
+	<!-- urls and security configuration -->
+    
+    <security:http pattern="/**" entry-point-ref="googleEntryPoint">       
+       <security:csrf disabled="true"/>
+		<security:headers disabled="true" />
+        <security:custom-filter after="CAS_FILTER" ref="clientFilter" />
+         <security:intercept-url pattern="/googlelogin/**" access="isAuthenticated()" />       
+		 <security:intercept-url pattern="/**" access="permitAll()" />
+        <security:logout logout-success-url="/login" invalidate-session="true" />
+    </security:http>
+    
+    
+
+    <bean id="googleEntryPoint" class="org.pac4j.springframework.security.web.ClientAuthenticationEntryPoint">
+        <property name="client" ref="googleClient" />
+    </bean>
+    
+   
+
+	<!-- clients definition -->
+    <bean id="googleClient" class="org.pac4j.oauth.client.Google2Client">
+        <property name="key" value="222457423066-5b8rc5kaco3khb46van0c4vf9gj4eeb8.apps.googleusercontent.com" />
+        <property name="secret" value="cnIp8g-vvCS2jwmJ6Anni8Pt" />
+    </bean>
+
+
+    <bean id="clients" class="org.pac4j.core.client.Clients">
+        <property name="callbackUrl" value="http://localhost:8080/spring-security-pack4j/callback" />
+        <property name="clients">
+        	<list>
+        		<ref bean="googleClient" />    
+        		
+        	</list>
+        </property>
+    </bean>
+
+	<!-- common to all clients -->
+    <bean id="clientFilter" class="org.pac4j.springframework.security.web.ClientAuthenticationFilter">
+    	<!-- <constructor-arg value="/spring-security-pac4j/callback"/> -->
+        <property name="clients" ref="clients" />
+        <property name="sessionAuthenticationStrategy" ref="sas" />
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
+
+    <bean id="clientProvider" class="org.pac4j.springframework.security.authentication.ClientAuthenticationProvider">
+        <property name="clients" ref="clients" />
+    </bean>
+
+    <bean id="httpSessionRequestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache" />
+
+    <bean id="sas" class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
+</beans>
