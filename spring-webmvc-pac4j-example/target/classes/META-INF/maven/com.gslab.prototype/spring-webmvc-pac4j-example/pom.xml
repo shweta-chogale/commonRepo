@@ -7,7 +7,7 @@
   <properties>
         <!-- <spring-webmvc-pac4j.version>1.1.0</spring-webmvc-pac4j.version> -->
         <pac4j.version>1.8.8</pac4j.version>
-        <org.springframework-version>4.0.0.RELEASE</org.springframework-version>
+        <org.springframework-version>5.2.20.RELEASE</org.springframework-version>
    </properties>
    
    <dependencies>
