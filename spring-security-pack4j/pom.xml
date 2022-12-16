@@ -9,7 +9,7 @@
       <properties>
         <pac4jVersion>1.8.8</pac4jVersion>
         <springSecurityVersion>4.0.4.RELEASE</springSecurityVersion>
-        <springVersion>4.2.2.RELEASE</springVersion>
+        <springVersion>5.2.20.RELEASE</springVersion>
         <servletVersion>3.1.0</servletVersion>
         <springSecurityPac4jVersion>1.4.3</springSecurityPac4jVersion>
         <logbackVersion>1.0.13</logbackVersion>
